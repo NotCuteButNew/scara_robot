@@ -104,7 +104,7 @@
             </geometry>
             <origin xyz="${link3_visul_origin_x_offest} 0.0 0.0" rpy="0.0 0.0 0.0"/>
             <material name="yellow">
-                <color rgba="0 1 0.5 1.0"/>
+                <color rgba="1 1 0 0.8"/>
             </material>
         </visual>
         <collision>
