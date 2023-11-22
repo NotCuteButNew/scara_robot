@@ -113,7 +113,6 @@
             </geometry>
             <origin xyz="${link3_visul_origin_x_offest} 0.0  0.0" rpy="0.0 0.0 0.0"/>
         </collision>
-        <!-- <xacro:Box_inertial_matrix m="${link3_m}" l="${link3_x}" w="${link3_y}" h="${link3_z}"/> -->
         <inertial>
             <origin xyz="${link3_visul_origin_x_offest} 0.0 0.0"/>
             <mass value="${link3_m}"/>
