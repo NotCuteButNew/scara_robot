@@ -1,7 +1,10 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="scara_robot">
+    <xacro:include filename="calculate_inertial.xacro" />
+
     <xacro:property name="base_link_x" value="0.2"/>
     <xacro:property name="base_link_y" value="0.2"/>
     <xacro:property name="base_link_z" value="0.05"/>
+    <xacro:property name="base_link_m" value="2"/>
 
     <link name="base_link">
         <visual>
@@ -13,10 +16,18 @@
             <color rgba="1.0 0.0 0.0 0.5"/>
         </material>
         </visual>
+        <collision>
+        <geometry>
+            <box size="${base_link_x} ${base_link_y} ${base_link_z}"/>
+        </geometry>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </collision>
+        <xacro:Box_inertial_matrix m="${base_link_m}" l="${base_link_x}" w="${base_link_y}" h="${base_link_z}"/>
     </link>
 
     <xacro:property name="link1_radius" value="0.06"/>
     <xacro:property name="link1_length" value="0.34"/>
+    <xacro:property name="link1_m" value="1.2"/>
 
     <link name="link1">
         <visual>
@@ -28,6 +39,13 @@
             <color rgba="0.0 1 0.0 0.5"/>
         </material>
         </visual>
+        <collision>
+        <geometry>
+            <cylinder radius="${link1_radius}" length="${link1_length}"/>
+        </geometry>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </collision>
+        <xacro:cylinder_inertial_matrix m="${link1_m}" r="${link1_radius}" h="${link1_length}"/>
     </link>
 
     <joint name="link12base" type="revolute">
@@ -41,6 +59,7 @@
     <xacro:property name="link2_x" value="0.3" />
     <xacro:property name="link2_y" value="0.07" />
     <xacro:property name="link2_z" value="0.05" />
+    <xacro:property name="link2_m" value="0.05" />
 
     <link name="link2">
         <visual>
@@ -52,6 +71,13 @@
             <color rgba="0.0 0.0 1 0.8"/>    
         </material>
         </visual>
+        <collision>
+        <geometry>
+            <box size="${link2_x} ${link2_y} ${link2_z}"/>
+            <origin xyz="0 0.0  0.0" rpy="0.0 0.0 0.0"/>
+        </geometry>
+        </collision>
+        <xacro:Box_inertial_matrix m="${link2_m}" l="${link2_x}" w="${link2_y}" h="${link2_z}"/>
     </link>
 
     <xacro:property name="link2_exercis_space" value="0.16" />
@@ -69,6 +95,7 @@
     <xacro:property name="link3_y" value="0.07"/>
     <xacro:property name="link3_z" value="0.05"/>
     <xacro:property name="link3_visul_origin_x_offest" value="${link3_x/2-0.02}"/>
+    <xacro:property name="link3_m" value="0.8"/>
 
     <link name="link3">
         <visual>
@@ -80,6 +107,20 @@
                 <color rgba="0 1 0.5 1.0"/>
             </material>
         </visual>
+        <collision>
+            <geometry>
+                <box size="${link3_x} ${link3_y} ${link3_z}"/>
+            </geometry>
+            <origin xyz="${link3_visul_origin_x_offest} 0.0  0.0" rpy="0.0 0.0 0.0"/>
+        </collision>
+        <!-- <xacro:Box_inertial_matrix m="${link3_m}" l="${link3_x}" w="${link3_y}" h="${link3_z}"/> -->
+        <inertial>
+            <origin xyz="${link3_visul_origin_x_offest} 0.0 0.0"/>
+            <mass value="${link3_m}"/>
+            <inertia ixx="${link3_m*(link3_z*link3_z + link3_x*link3_x)/12}" ixy = "0" ixz = "0"
+                iyy="${link3_m*(link3_y*link3_y + link3_x*link3_x)/12}" iyz= "0"
+                izz="${link3_m*(link3_y*link3_y + link3_z*link3_z)/12}" />
+       </inertial>
     </link>
 
     <joint name="link3_to_link2" type="revolute">
@@ -93,6 +134,7 @@
     <xacro:property name="gripper_base_link_x" value="0.02"/>
     <xacro:property name="gripper_base_link_y" value="0.07"/>
     <xacro:property name="gripper_base_link_z" value="0.07"/>
+    <xacro:property name="gripper_base_link_m" value="0.3"/>
 
     <link name="gripper_base_link">
         <visual>
@@ -104,6 +146,13 @@
                 <color rgba="1 0 0.0 1.0"/>
             </material>
         </visual>
+        <collision>
+            <geometry>
+                <box size="${gripper_base_link_x} ${gripper_base_link_y} ${gripper_base_link_z}"/>
+            </geometry>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </collision>
+        <xacro:Box_inertial_matrix m="${gripper_base_link_m}" l="${gripper_base_link_x}" w="${gripper_base_link_y}" h="${gripper_base_link_z}"/>
     </link>
 
     <joint name="gripper_base_link_to_link3" type="revolute">
@@ -117,6 +166,7 @@
     <xacro:property name="gripper_finger_link_x" value="0.08"/>
     <xacro:property name="gripper_finger_link_y" value="0.01"/>
     <xacro:property name="gripper_finger_link_z" value="0.01"/>
+    <xacro:property name="gripper_finger_link_m" value="0.1"/>
 
     <link name="gripper_left">
         <visual>
@@ -128,6 +178,13 @@
                 <color rgba="0.0 1 0.0 1.0"/>
             </material>
         </visual>
+        <collision>
+            <geometry>
+                <box size="${gripper_finger_link_x} ${gripper_finger_link_y} ${gripper_finger_link_z}"/>
+            </geometry>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </collision>
+        <xacro:Box_inertial_matrix m="${gripper_finger_link_m}" l="${gripper_finger_link_x}" w="${gripper_finger_link_y}" h="${gripper_finger_link_z}"/>
     </link>
 
     <joint name="left_2_gripper_base" type="prismatic">
@@ -148,6 +205,13 @@
                 <color rgba="0.0 0 1 1.0"/>
             </material>
         </visual>
+        <collision>
+            <geometry>
+                <box size="${gripper_finger_link_x} ${gripper_finger_link_y} ${gripper_finger_link_z}"/>
+            </geometry>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </collision>
+        <xacro:Box_inertial_matrix m="${gripper_finger_link_m}" l="${gripper_finger_link_x}" w="${gripper_finger_link_y}" h="${gripper_finger_link_z}"/>
     </link>
 
     <joint name="right_2_gripper_base" type="prismatic">
