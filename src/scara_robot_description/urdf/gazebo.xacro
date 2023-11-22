@@ -1,0 +1,30 @@
+<robot name="base" xmlns:xacro="http://wiki.ros.org/xacro">
+    <xacro:include filename="scara.xacro" />
+    <gazebo reference="base_link">
+        <material>Gazebo/Red</material>
+    </gazebo>
+
+    <gazebo reference="link1">
+        <material>Gazebo/Green</material>
+    </gazebo>
+
+    <gazebo reference="link2">
+        <material>Gazebo/Blue</material>
+    </gazebo>
+
+    <gazebo reference="link3">
+        <material>Gazebo/Yellow</material>
+    </gazebo>
+
+    <gazebo reference="gripper_base_link">
+        <material>Gazebo/Red</material>
+    </gazebo>
+
+    <gazebo reference="gripper_left">
+        <material>Gazebo/Green</material>
+    </gazebo>
+
+    <gazebo reference="gripper_right">
+        <material>Gazebo/Blue</material>
+    </gazebo>
+</robot>
