@@ -1,3 +1,160 @@
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="scara">
-    
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="scara_robot">
+    <xacro:property name="base_link_x" value="0.2"/>
+    <xacro:property name="base_link_y" value="0.2"/>
+    <xacro:property name="base_link_z" value="0.05"/>
+
+    <link name="base_link">
+        <visual>
+        <geometry>
+            <box size="${base_link_x} ${base_link_y} ${base_link_z}"/>
+        </geometry>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <material name="red">
+            <color rgba="1.0 0.0 0.0 0.5"/>
+        </material>
+        </visual>
+    </link>
+
+    <xacro:property name="link1_radius" value="0.06"/>
+    <xacro:property name="link1_length" value="0.34"/>
+
+    <link name="link1">
+        <visual>
+        <geometry>
+            <cylinder radius="${link1_radius}" length="${link1_length}"/>
+        </geometry>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <material name="green">
+            <color rgba="0.0 1 0.0 0.5"/>
+        </material>
+        </visual>
+    </link>
+
+    <joint name="link12base" type="revolute">
+        <parent link="base_link"/>
+        <child link="link1"/>
+        <origin xyz="0.0 0.0 ${(link1_length+base_link_z)/2}" rpy="0.0 0.0 0.0"/>       
+        <axis xyz="0.0 0.0 1"/>
+        <limit lower="-3.14" upper="2.355" effort="0.45" velocity="0.5"/>
+    </joint>
+
+    <xacro:property name="link2_x" value="0.3" />
+    <xacro:property name="link2_y" value="0.07" />
+    <xacro:property name="link2_z" value="0.05" />
+
+    <link name="link2">
+        <visual>
+        <geometry>
+            <box size="${link2_x} ${link2_y} ${link2_z}"/>
+        </geometry>
+        <origin xyz="0 0.0  0.0" rpy="0.0 0.0 0.0"/>
+        <material name="blue">
+            <color rgba="0.0 0.0 1 0.8"/>    
+        </material>
+        </visual>
+    </link>
+
+    <xacro:property name="link2_exercis_space" value="0.16" />
+    <xacro:property name="link1_dead_zone" value="0.04" />
+
+    <joint name="link2_to_link1" type="prismatic">
+        <parent link="link1"/>
+        <child link="link2"/>
+        <origin xyz="${link2_x/2} 0.0 ${link1_dead_zone+link2_exercis_space-link1_length/2}"/>
+        <axis xyz="0.0 0.0 1"/>
+        <limit lower="${-link2_exercis_space}" upper="0.0" effort="0.45" velocity="0.5"/>
+    </joint>
+
+    <xacro:property name="link3_x" value="0.2"/>
+    <xacro:property name="link3_y" value="0.07"/>
+    <xacro:property name="link3_z" value="0.05"/>
+    <xacro:property name="link3_visul_origin_x_offest" value="${link3_x/2-0.02}"/>
+
+    <link name="link3">
+        <visual>
+            <geometry>
+                <box size="${link3_x} ${link3_y} ${link3_z}"/>
+            </geometry>
+            <origin xyz="${link3_visul_origin_x_offest} 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <material name="yellow">
+                <color rgba="0 1 0.5 1.0"/>
+            </material>
+        </visual>
+    </link>
+
+    <joint name="link3_to_link2" type="revolute">
+        <parent link="link2"/>
+        <child link="link3"/>
+        <origin xyz="${link2_x/2-0.02} 0.0 ${-(link3_z+link2_z)/2}" rpy="0.0 0.0 0.0"/>
+        <axis xyz="0.0 0.0 1"/>
+        <limit lower="3.10" upper="-2.61" effort="0.45" velocity="0.5"/>
+    </joint>
+
+    <xacro:property name="gripper_base_link_x" value="0.02"/>
+    <xacro:property name="gripper_base_link_y" value="0.07"/>
+    <xacro:property name="gripper_base_link_z" value="0.07"/>
+
+    <link name="gripper_base_link">
+        <visual>
+            <geometry>
+                <box size="${gripper_base_link_x} ${gripper_base_link_y} ${gripper_base_link_z}"/>
+            </geometry>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <material name="red">
+                <color rgba="1 0 0.0 1.0"/>
+            </material>
+        </visual>
+    </link>
+
+    <joint name="gripper_base_link_to_link3" type="revolute">
+        <parent link="link3"/>
+        <child link="gripper_base_link"/>
+        <origin xyz="${(link3_x/2-0.02)*2} 0.0 ${-(link3_z+gripper_base_link_z)/2}" rpy="0.0 0.0 0.0"/>
+        <axis xyz="0.0 0.0 1.0"/>
+        <limit lower="-2.61" upper="2.61" effort="0.0" velocity="0.0"/>
+    </joint>
+
+    <xacro:property name="gripper_finger_link_x" value="0.08"/>
+    <xacro:property name="gripper_finger_link_y" value="0.01"/>
+    <xacro:property name="gripper_finger_link_z" value="0.01"/>
+
+    <link name="gripper_left">
+        <visual>
+            <geometry>
+                <box size="${gripper_finger_link_x} ${gripper_finger_link_y} ${gripper_finger_link_z}"/>
+            </geometry>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <material name="green">
+                <color rgba="0.0 1 0.0 1.0"/>
+            </material>
+        </visual>
+    </link>
+
+    <joint name="left_2_gripper_base" type="prismatic">
+        <parent link="gripper_base_link"/>
+        <child link="gripper_left"/>
+        <origin xyz="${(gripper_base_link_x+gripper_finger_link_x)/2} ${(gripper_base_link_y-gripper_finger_link_y)/2} ${-(gripper_base_link_z-gripper_finger_link_z)/2}" rpy="0.0 0.0 0.0"/>
+        <axis xyz="0.0 1 0"/>
+        <limit lower="-0.025" upper="0" effort="0.0" velocity="0.0"/>
+    </joint>
+
+    <link name="gripper_right">
+        <visual>
+            <geometry>
+                <box size="${gripper_finger_link_x} ${gripper_finger_link_y} ${gripper_finger_link_z}"/>
+            </geometry>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <material name="blue">
+                <color rgba="0.0 0 1 1.0"/>
+            </material>
+        </visual>
+    </link>
+
+    <joint name="right_2_gripper_base" type="prismatic">
+        <parent link="gripper_base_link"/>
+        <child link="gripper_right"/>
+        <origin xyz="${(gripper_base_link_x+gripper_finger_link_x)/2} ${-(gripper_base_link_y-gripper_finger_link_y)/2} ${-(gripper_base_link_z-gripper_finger_link_z)/2}" rpy="0.0 0.0 0.0"/>
+        <axis xyz="0.0 1 0"/>
+        <limit lower="0" upper="0.025" effort="0.0" velocity="0.0"/>
+    </joint>
 </robot>
