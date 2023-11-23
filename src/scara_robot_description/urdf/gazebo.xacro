@@ -1,5 +1,14 @@
 <robot name="base" xmlns:xacro="http://wiki.ros.org/xacro">
     <xacro:include filename="scara.xacro" />
+
+    <link name="world"/>
+
+    <joint name="base_2_world" type="fixed">
+        <parent link="world"/>
+        <child link="base_link"/>
+        <origin xyz="0.0 0.0 ${base_link_z/2}"/>
+    </joint>
+
     <gazebo reference="base_link">
         <material>Gazebo/Red</material>
     </gazebo>
