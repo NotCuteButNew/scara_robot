@@ -3,7 +3,7 @@
 
     <link name="world" />
 
-    <joint name="base_2_world" type="fixed">
+    <joint name="base_to_world" type="fixed">
         <parent link="world" />
         <child link="base_link" />
         <origin xyz="0.0 0.0 ${base_link_z/2}" />
@@ -45,7 +45,7 @@
 
     <transmission name="tran1">
         <type>transmission_interface/SimpleTransmission</type>
-        <joint name="link12base">
+        <joint name="link1_to_base">
             <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
         </joint>
         <actuator name="motor1">
@@ -89,7 +89,7 @@
 
     <transmission name="tran5">
         <type>transmission_interface/SimpleTransmission</type>
-        <joint name="left_2_gripper_base">
+        <joint name="left_to_gripper_base">
             <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
         </joint>
         <actuator name="motor5">
@@ -100,7 +100,7 @@
 
     <transmission name="tran6">
         <type>transmission_interface/SimpleTransmission</type>
-        <joint name="right_2_gripper_base">
+        <joint name="right_to_gripper_base">
             <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
         </joint>
         <actuator name="motor6">
