@@ -1,4 +1,75 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:include filename="$(find scara_robot_description)/urdf/gazebo.xacro" />
+  <ros2_control name="scara_hardware_interface" type="system">
+    <hardware>
+      <plug>gazebo_ros2_control/Gazebo</plug>
+    </hardware>
+
+    <joint name="link1_to_base">
+      <command_interface name="position">
+        <param name="min">-3.14</param>
+        <param name="max">2.355</param>
+      </command_interface>
+      <state_interface name="position" >
+        <param name="initial_value">0.0 </param>
+      </state_interface>
+    </joint>
+
+    <joint name="link2_to_link1">
+      <command_interface name="position">
+        <param name="min">$(xacro:link2_exercis_space)</param>
+        <param name="max">0</param>
+      </command_interface>
+      <state_interface name="position" >
+        <param name="initial_value">0.0 </param>
+      </state_interface>
+    </joint>
+
+    <joint name="link3_to_link2">
+      <command_interface name="position">
+        <param name="min">3.10</param>
+        <param name="max">-2.61</param>
+      </command_interface>
+      <state_interface name="position" >
+        <param name="initial_value">0.0 </param>
+      </state_interface>
+    </joint>
+
+    <joint name="gripper_base_link_to_link3">
+      <command_interface name="position">
+        <param name="min">-2.61</param>
+        <param name="max">2.61</param>
+      </command_interface>
+      <state_interface name="position" >
+        <param name="initial_value">0.0 </param>
+      </state_interface>
+    </joint>
+
+    <joint name="left_to_gripper_base">
+      <command_interface name="position">
+        <param name="min">-0.025</param>
+        <param name="max">0</param>
+      </command_interface>
+      <state_interface name="position" >
+        <param name="initial_value">0.0 </param>
+      </state_interface>
+    </joint>
+
+    <joint name="right_to_gripper_base">
+      <command_interface name="position">
+        <param name="min">0</param>
+        <param name="max">0.025</param>
+      </command_interface>
+      <state_interface name="position" >
+        <param name="initial_value">0.0 </param>
+      </state_interface>
+    </joint>
     
+    <gazebo>
+      <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+        <parameters>$(find scara_control)/config/scara_controller.yaml</parameters>
+      </plugin>
+    </gazebo>
+  </ros2_control>
 </robot>
