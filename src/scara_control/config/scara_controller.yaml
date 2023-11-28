@@ -1,31 +1,23 @@
-scara_robot:
+controller_manager:
+  ros__parameters:
+  update_rate: 30
+  use_sim_time: true
+
   # Publish all joint states -----------------------------------
-  joint_state_controller:
-    type: joint_state_controller/JointStateController
+  joint_state_broadcast:
+    type: joint_state_broadcaster/JointStateBroadcaster 
     publish_rate: 50  
 
   # Position Controllers ---------------------------------------
-  joint1_position_controller:
-    type: effort_controllers/JointPositionController
-    joint: link1_to_base
-    pid: {p: 100.0, i: 0.01, d: 10.0}
-  joint2_position_controller:
-    type: effort_controllers/JointPositionController
-    joint: link2_to_link1
-    pid: {p: 100.0, i: 0.01, d: 10.0}
-  joint3_position_controller:
-    type: effort_controllers/JointPositionController
-    joint: link3_to_link2
-    pid: {p: 100.0, i: 0.01, d: 10.0}
-  joint4_position_controller:
-    type: effort_controllers/JointPositionController
-    joint: gripper_base_link_to_link3
-    pid: {p: 100.0, i: 0.01, d: 10.0}
-  joint5_position_controller:
-    type: effort_controllers/JointPositionController
-    joint: left_to_gripper_base
-    pid: {p: 100.0, i: 0.01, d: 10.0}
-  joint6_position_controller:
-    type: effort_controllers/JointPositionController
-    joint: right_to_gripper_base
-    pid: {p: 100.0, i: 0.01, d: 10.0}
+  joint_position_controller:
+    type: position_controllers/JointGroupPositionController
+
+joint_position_controller:
+  ros__parameters:
+    joints:
+      - link1_to_base
+      - link2_to_link1
+      - link3_to_link2
+      - gripper_base_link_to_link3
+      - left_to_gripper_base
+      - right_to_gripper_base
