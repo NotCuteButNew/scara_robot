@@ -1,0 +1,9 @@
+<library path="scara_control">
+  <class name="scara_control/ScaraHardwaredInterface"
+         type="scara_control::ScaraHardwaredInterface"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>
+      ros2_control hardware interface.
+    </description>
+  </class>
+</library>
