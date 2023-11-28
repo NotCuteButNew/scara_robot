@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <cstdio>
 #include <limits>
 #include <vector>
 
@@ -50,6 +51,7 @@ std::vector<hardware_interface::StateInterface> ScaraHardwaredInterface::export_
   std::vector<hardware_interface::StateInterface> state_interfaces;
   for (size_t i = 0; i < info_.joints.size(); ++i)
   {
+    hw_states_[i]=stod(info_.joints[i].state_interfaces[0].initial_value);
     state_interfaces.emplace_back(hardware_interface::StateInterface(
       // TODO(anyone): insert correct interfaces
       info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_states_[i]));
@@ -75,7 +77,8 @@ hardware_interface::CallbackReturn ScaraHardwaredInterface::on_activate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
   // TODO(anyone): prepare the robot to receive commands
-
+  hw_commands_=hw_states_;
+  joint_states_=hw_states_;
   return CallbackReturn::SUCCESS;
 }
 
@@ -91,7 +94,10 @@ hardware_interface::return_type ScaraHardwaredInterface::read(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   // TODO(anyone): read robot states
-
+  hw_states_=joint_states_;
+  for (const auto &value : hw_states_) {
+    std::cout<<value<<std::endl;
+  }
   return hardware_interface::return_type::OK;
 }
 
@@ -99,7 +105,10 @@ hardware_interface::return_type ScaraHardwaredInterface::write(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
   // TODO(anyone): write robot's commands'
-
+  joint_states_= hw_commands_;
+  for (const auto &value : hw_commands_) {
+    std::cout<<value<<std::endl;
+  }
   return hardware_interface::return_type::OK;
 }
 
